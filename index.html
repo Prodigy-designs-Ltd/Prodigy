@@ -1,0 +1,1889 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Prodigy Designs Ltd. creates premium brand identities, graphic design, motion graphics, UI/UX, websites, mobile app design, and digital campaigns.">
+  <meta name="theme-color" content="#050610">
+  <title>Prodigy Designs Ltd. | Designing The Future. Perfecting The Present.</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://unpkg.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f7fbff;
+      --muted: rgba(247,251,255,.68);
+      --dim: rgba(247,251,255,.48);
+      --panel: rgba(255,255,255,.082);
+      --panel-strong: rgba(255,255,255,.135);
+      --line: rgba(255,255,255,.18);
+      --cyan: #16e6ff;
+      --blue: #3978ff;
+      --magenta: #ff2ebd;
+      --pink: #ff6aa8;
+      --violet: #8a45ff;
+      --silver: #d8e0ea;
+      --gold: #efc76a;
+      --green: #4be0a4;
+      --bg: #050610;
+      --navy: #071126;
+      --radius: 8px;
+      --shadow: 0 28px 90px rgba(0,0,0,.5);
+      --ease: cubic-bezier(.22,1,.36,1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 17% 12%, rgba(22,230,255,.18), transparent 32rem),
+        radial-gradient(circle at 83% 8%, rgba(255,46,189,.16), transparent 34rem),
+        radial-gradient(circle at 48% 44%, rgba(138,69,255,.11), transparent 36rem),
+        linear-gradient(140deg, #03040b 0%, #071126 42%, #13051d 76%, #050610 100%);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-x: hidden;
+      letter-spacing: 0;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+      background-size: 90px 90px;
+      mask-image: radial-gradient(circle at 50% 20%, black, transparent 72%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: .42;
+      mix-blend-mode: screen;
+      background:
+        radial-gradient(circle at var(--mx, 50%) var(--my, 30%), rgba(22,230,255,.22), transparent 19rem),
+        conic-gradient(from 40deg at 50% 50%, rgba(22,230,255,.16), rgba(255,46,189,.14), rgba(75,224,164,.10), rgba(22,230,255,.16));
+      filter: blur(24px) saturate(135%);
+      animation: aurora 22s linear infinite alternate;
+    }
+
+    @keyframes aurora {
+      0% { transform: scale(1) rotate(0deg); }
+      100% { transform: scale(1.12) rotate(10deg); }
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button, input, textarea { font: inherit; }
+    ::selection { background: rgba(22,230,255,.35); color: white; }
+
+    #particleCanvas,
+    #labCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      pointer-events: none;
+      opacity: .045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 10000;
+      padding: .7rem 1rem;
+      background: #fff;
+      color: #050610;
+      transform: translateY(-160%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .intro {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(22,230,255,.09), transparent 20rem),
+        radial-gradient(circle at 62% 58%, rgba(255,46,189,.09), transparent 22rem),
+        #02030a;
+      overflow: hidden;
+    }
+    .intro.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 1s var(--ease), visibility 1s var(--ease);
+    }
+    .intro-particles {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(22,230,255,.9) 0 1px, transparent 2px),
+        radial-gradient(circle, rgba(255,46,189,.75) 0 1px, transparent 2px);
+      background-size: 82px 82px, 128px 128px;
+      animation: drift 7s linear infinite;
+      opacity: .38;
+    }
+    @keyframes drift { to { transform: translate3d(40px, -70px, 0); } }
+    .intro-mark {
+      width: min(760px, 86vw);
+      text-align: center;
+      filter: drop-shadow(0 0 28px rgba(22,230,255,.42));
+    }
+    .intro-wave {
+      width: min(430px, 72vw);
+      margin-inline: auto;
+      overflow: visible;
+    }
+    .intro-wave .energy {
+      stroke-dasharray: 1060;
+      stroke-dashoffset: 1060;
+      animation: drawWave 2.1s .45s var(--ease) forwards, waveGlow 2.2s 2.2s ease-in-out infinite alternate;
+    }
+    .intro-wave .trail {
+      stroke-dasharray: 140 920;
+      stroke-dashoffset: 900;
+      animation: trail 1.9s .55s ease-out forwards;
+    }
+    .intro-title {
+      margin: 1.3rem 0 .4rem;
+      font-size: clamp(2.8rem, 8vw, 7.8rem);
+      line-height: .82;
+      font-weight: 900;
+      letter-spacing: .22em;
+      text-indent: .22em;
+      transform: translateY(28px);
+      opacity: 0;
+      background: linear-gradient(100deg, #fff, #d8e0ea 28%, #f8d889 52%, #fff 72%);
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: titleIn 1.2s 2.25s var(--ease) forwards, shine 3s 3.2s ease-in-out infinite;
+      background-size: 220% auto;
+    }
+    .intro-tagline {
+      margin: 0;
+      color: rgba(255,255,255,.72);
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: titleIn 1.1s 3s var(--ease) forwards;
+    }
+    .intro-burst {
+      position: absolute;
+      width: 15rem;
+      height: 15rem;
+      border-radius: 50%;
+      border: 1px solid rgba(22,230,255,.28);
+      opacity: 0;
+      animation: burst 1.2s 4.3s var(--ease) forwards;
+      box-shadow: 0 0 80px rgba(255,46,189,.22), inset 0 0 55px rgba(22,230,255,.18);
+    }
+    .intro-skip {
+      position: absolute;
+      right: 1.2rem;
+      bottom: 1.2rem;
+      border: 1px solid rgba(255,255,255,.16);
+      color: rgba(255,255,255,.72);
+      background: rgba(255,255,255,.06);
+      padding: .72rem .95rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+    @keyframes drawWave { to { stroke-dashoffset: 0; } }
+    @keyframes trail { to { stroke-dashoffset: -260; opacity: 0; } }
+    @keyframes waveGlow {
+      from { filter: drop-shadow(0 0 8px rgba(22,230,255,.75)); }
+      to { filter: drop-shadow(0 0 22px rgba(255,46,189,.85)); }
+    }
+    @keyframes titleIn { to { opacity: 1; transform: translateY(0); } }
+    @keyframes shine { to { background-position: 220% center; } }
+    @keyframes burst {
+      0% { opacity: 0; transform: scale(.2); }
+      25% { opacity: 1; }
+      100% { opacity: 0; transform: scale(7); }
+    }
+
+    .site-nav {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      width: min(1180px, calc(100% - 28px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .7rem .8rem .7rem 1rem;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      background: rgba(8, 12, 26, .48);
+      backdrop-filter: blur(22px) saturate(150%);
+      box-shadow: 0 18px 70px rgba(0,0,0,.28);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .72rem;
+      min-width: 0;
+    }
+    .brand-glyph {
+      width: 38px;
+      height: 26px;
+      flex: 0 0 auto;
+      filter: drop-shadow(0 0 12px rgba(22,230,255,.55));
+    }
+    .brand strong {
+      display: block;
+      font-size: .9rem;
+      letter-spacing: .22em;
+    }
+    .brand span {
+      display: block;
+      margin-top: .14rem;
+      color: var(--dim);
+      font-size: .68rem;
+      letter-spacing: .12em;
+      white-space: nowrap;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      color: rgba(255,255,255,.68);
+      font-size: .86rem;
+      font-weight: 700;
+    }
+    .nav-links a {
+      padding: .65rem .78rem;
+      border-radius: var(--radius);
+      transition: color .25s ease, background .25s ease;
+    }
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: #fff;
+      background: rgba(255,255,255,.08);
+      outline: none;
+    }
+    .menu-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: var(--radius);
+      color: #fff;
+      background: rgba(255,255,255,.075);
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+    }
+    .menu-toggle svg { pointer-events: none; }
+    .menu-toggle .menu-x { display: none; }
+    .site-nav.is-open .menu-toggle .menu-lines { display: none; }
+    .site-nav.is-open .menu-toggle .menu-x { display: block; }
+
+    .btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .56rem;
+      min-height: 48px;
+      padding: .88rem 1.1rem;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: var(--radius);
+      color: #fff;
+      background: rgba(255,255,255,.078);
+      overflow: hidden;
+      cursor: pointer;
+      font-weight: 800;
+      isolation: isolate;
+      box-shadow: 0 12px 42px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.18);
+      transition: transform .28s var(--ease), border-color .28s ease, box-shadow .28s ease;
+    }
+    .btn::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      z-index: -1;
+      background: linear-gradient(110deg, rgba(22,230,255,.42), rgba(255,46,189,.38), rgba(239,199,106,.20), rgba(22,230,255,.42));
+      opacity: .55;
+      transform: translateX(-55%);
+      transition: transform .5s var(--ease), opacity .3s ease;
+    }
+    .btn:hover { transform: translateY(-2px); border-color: rgba(22,230,255,.5); box-shadow: 0 18px 56px rgba(22,230,255,.18); }
+    .btn:hover::before { transform: translateX(0); opacity: .85; }
+    .btn.primary { background: linear-gradient(135deg, rgba(22,230,255,.22), rgba(255,46,189,.20)); }
+    .btn.small { min-height: 40px; padding: .66rem .85rem; font-size: .84rem; }
+
+    main { position: relative; z-index: 2; }
+    .section {
+      position: relative;
+      padding: clamp(5rem, 9vw, 9rem) max(1.1rem, calc((100vw - 1180px) / 2));
+      overflow: clip;
+    }
+    main > .section:not(.hero) {
+      content-visibility: auto;
+      contain-intrinsic-size: 900px;
+    }
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      margin: 0 0 1rem;
+      color: rgba(22,230,255,.92);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    .section-kicker::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2 {
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+    h1 {
+      max-width: 760px;
+      font-size: clamp(3.05rem, 7.1vw, 6.9rem);
+      line-height: .9;
+      margin-bottom: 1.2rem;
+      font-weight: 900;
+    }
+    h2 {
+      max-width: 860px;
+      font-size: clamp(2.25rem, 5.7vw, 5.6rem);
+      line-height: .95;
+      margin-bottom: 1.2rem;
+      font-weight: 900;
+    }
+    .display-gradient {
+      background: linear-gradient(95deg, #fff 8%, #d6e7ff 34%, #52ebff 52%, #ff69ca 72%, #f2cf79 92%);
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 36px rgba(22,230,255,.11);
+      background-size: 220% auto;
+      animation: gradientFlow 12s ease-in-out infinite alternate;
+    }
+    @keyframes gradientFlow { to { background-position: 100% center; } }
+    .lead {
+      max-width: 710px;
+      color: var(--muted);
+      font-size: clamp(1.04rem, 2vw, 1.26rem);
+      line-height: 1.72;
+    }
+
+    .hero {
+      min-height: 100svh;
+      display: grid;
+      align-items: center;
+      padding-top: 7.6rem;
+      padding-bottom: 5rem;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(360px, .72fr);
+      align-items: center;
+      gap: clamp(1.4rem, 3.8vw, 4rem);
+    }
+    .hero-copy {
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-title {
+      display: grid;
+      gap: .02em;
+      overflow: visible;
+    }
+    .hero-title span {
+      display: block;
+      white-space: nowrap;
+      max-width: 100%;
+    }
+    .eyebrow-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      padding: .62rem .82rem;
+      margin-bottom: 1.1rem;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: var(--radius);
+      color: rgba(255,255,255,.78);
+      background: rgba(255,255,255,.07);
+      backdrop-filter: blur(16px);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 18px var(--cyan);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse { 50% { transform: scale(1.65); opacity: .62; } }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .8rem;
+      margin: 2rem 0 2.4rem;
+    }
+    .hero-proof {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .8rem;
+      max-width: 720px;
+    }
+    .proof {
+      padding: 1rem;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.065);
+      backdrop-filter: blur(18px);
+    }
+    .proof strong {
+      display: block;
+      color: #fff;
+      font-size: clamp(1.45rem, 3vw, 2.25rem);
+      line-height: 1;
+    }
+    .proof span {
+      display: block;
+      margin-top: .4rem;
+      color: var(--dim);
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .hero-stage {
+      position: relative;
+      min-height: clamp(390px, 45vw, 560px);
+      display: grid;
+      place-items: center;
+      perspective: 1200px;
+      contain: layout paint;
+    }
+    .signal-sculpture {
+      position: relative;
+      width: min(440px, 88vw);
+      aspect-ratio: 4 / 5;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.16), rgba(255,255,255,.045)),
+        radial-gradient(circle at 30% 22%, rgba(22,230,255,.28), transparent 24%),
+        radial-gradient(circle at 78% 72%, rgba(255,46,189,.22), transparent 27%);
+      backdrop-filter: blur(18px) saturate(145%);
+      box-shadow:
+        inset 0 0 42px rgba(255,255,255,.075),
+        inset 0 0 110px rgba(22,230,255,.055),
+        0 34px 110px rgba(0,0,0,.45);
+      transform-style: preserve-3d;
+      overflow: hidden;
+      animation: float 7s ease-in-out infinite;
+    }
+    .signal-sculpture::before {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: inherit;
+      background:
+        linear-gradient(100deg, transparent 0 30%, rgba(255,255,255,.22), transparent 58%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, transparent 1px 32px);
+      transform: translateX(-48%);
+      animation: glassSweep 7s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .signal-sculpture::after {
+      content: "";
+      position: absolute;
+      width: 72%;
+      height: 18%;
+      bottom: 17%;
+      border: 1px solid rgba(22,230,255,.22);
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(22,230,255,.12), transparent 66%);
+      transform: rotateX(67deg);
+      box-shadow: 0 0 34px rgba(22,230,255,.18);
+    }
+    .signal-ring {
+      position: absolute;
+      inset: 10%;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 50%;
+      transform: rotateX(66deg) rotateZ(18deg);
+      box-shadow: 0 0 44px rgba(138,69,255,.18);
+    }
+    .signal-ring.two {
+      inset: 20%;
+      border-color: rgba(255,46,189,.24);
+      transform: rotateX(70deg) rotateZ(-24deg);
+    }
+    .signal-core {
+      position: relative;
+      z-index: 2;
+      width: 76%;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 24%, rgba(255,255,255,.28), transparent 16%),
+        radial-gradient(circle at 60% 74%, rgba(255,46,189,.20), transparent 31%),
+        radial-gradient(circle at 50% 50%, rgba(22,230,255,.14), rgba(255,255,255,.035) 58%, rgba(255,255,255,.08));
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: inset 0 0 55px rgba(255,255,255,.08), 0 0 70px rgba(22,230,255,.16);
+    }
+    .signal-wave {
+      position: absolute;
+      width: 74%;
+      top: 25%;
+      filter: drop-shadow(0 0 14px rgba(22,230,255,.7)) drop-shadow(0 0 22px rgba(255,46,189,.55));
+    }
+    .signal-label {
+      position: absolute;
+      z-index: 3;
+      left: 50%;
+      bottom: 12%;
+      transform: translateX(-50%);
+      width: min(78%, 310px);
+      padding: .82rem .9rem;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: var(--radius);
+      color: rgba(255,255,255,.78);
+      background: rgba(5,6,16,.45);
+      backdrop-filter: blur(14px);
+      text-align: center;
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    @keyframes glassSweep {
+      0%, 34% { transform: translateX(-58%); opacity: .32; }
+      65% { transform: translateX(56%); opacity: .6; }
+      100% { transform: translateX(56%); opacity: .2; }
+    }
+    @keyframes float { 50% { transform: translateY(-16px) rotateX(5deg) rotateY(-7deg); } }
+    .scroll-cue {
+      position: absolute;
+      left: 50%;
+      bottom: 1.35rem;
+      transform: translateX(-50%);
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 58px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 999px;
+      opacity: .75;
+    }
+    .scroll-cue::after {
+      content: "";
+      width: 5px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--cyan);
+      animation: scrollDot 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollDot {
+      0% { transform: translateY(-12px); opacity: 0; }
+      30%,70% { opacity: 1; }
+      100% { transform: translateY(12px); opacity: 0; }
+    }
+
+    .glass {
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(255,255,255,.115), rgba(255,255,255,.048));
+      backdrop-filter: blur(24px) saturate(145%);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.14);
+    }
+
+    .about-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, .82fr) minmax(0, 1fr);
+      gap: clamp(1.2rem, 4vw, 4rem);
+      align-items: center;
+    }
+    .about-card {
+      min-height: 520px;
+      padding: clamp(1.2rem, 4vw, 2.2rem);
+      position: relative;
+      overflow: hidden;
+    }
+    .about-card::before {
+      content: "";
+      position: absolute;
+      inset: -50% -30%;
+      background: conic-gradient(from 60deg, transparent, rgba(22,230,255,.25), transparent, rgba(255,46,189,.22), transparent);
+      animation: rotate 16s linear infinite;
+    }
+    @keyframes rotate { to { transform: rotate(360deg); } }
+    .about-inner {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: grid;
+      align-content: space-between;
+      gap: 2rem;
+    }
+    .about-logo {
+      width: 100%;
+      border-radius: var(--radius);
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      opacity: .92;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .about-fragments {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .8rem;
+    }
+    .fragment {
+      padding: 1rem;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      background: rgba(0,0,0,.22);
+      min-height: 100px;
+    }
+    .fragment span {
+      display: block;
+      color: var(--dim);
+      font-size: .72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: .5rem;
+    }
+    .fragment strong { font-size: 1.35rem; }
+    .story p {
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      line-height: 1.8;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: .9rem;
+      margin-top: 2.4rem;
+    }
+    .service-card {
+      position: relative;
+      min-height: 220px;
+      padding: 1.15rem;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: transform .45s var(--ease), border-color .3s ease, background .3s ease;
+    }
+    .service-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 12%, rgba(255,255,255,.16) 45%, transparent 60%);
+      transform: translateX(-120%);
+      transition: transform .7s var(--ease);
+    }
+    .service-card:hover {
+      transform: translateY(-9px) rotateX(5deg) rotateY(var(--tilt, -3deg));
+      border-color: rgba(22,230,255,.38);
+      background: linear-gradient(145deg, rgba(22,230,255,.12), rgba(255,46,189,.08));
+    }
+    .service-card:hover::before { transform: translateX(120%); }
+    .icon-box {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      color: #fff;
+      background: linear-gradient(135deg, rgba(22,230,255,.28), rgba(255,46,189,.20));
+      box-shadow: 0 0 26px rgba(22,230,255,.18);
+      margin-bottom: 1rem;
+    }
+    .service-card h3 { margin-bottom: .58rem; font-size: 1.12rem; }
+    .service-card p { color: var(--muted); line-height: 1.55; margin-bottom: 0; font-size: .94rem; }
+
+    .portfolio-shell {
+      margin-top: 2.5rem;
+      overflow: hidden;
+      border-block: 1px solid rgba(255,255,255,.12);
+      padding-block: 1.1rem;
+    }
+    .portfolio-track {
+      display: flex;
+      gap: 1rem;
+      width: max-content;
+      animation: marquee 52s linear infinite;
+      will-change: transform;
+    }
+    .portfolio-shell:hover .portfolio-track { animation-play-state: paused; }
+    @keyframes marquee { to { transform: translateX(calc(-50% - .5rem)); } }
+    .project-card {
+      width: clamp(270px, 34vw, 520px);
+      min-height: 410px;
+      flex: 0 0 auto;
+      overflow: hidden;
+      position: relative;
+      border-radius: var(--radius);
+      background: #090b18;
+      box-shadow: 0 28px 90px rgba(0,0,0,.32);
+      transition: transform .45s var(--ease), filter .3s ease;
+    }
+    .project-card:hover { transform: scale(1.035); filter: saturate(1.12) contrast(1.04); z-index: 3; }
+    .project-card img {
+      width: 100%;
+      height: 100%;
+      min-height: 410px;
+      object-fit: cover;
+      opacity: .88;
+      transition: transform .75s var(--ease), opacity .35s ease;
+    }
+    .project-card:hover img { transform: scale(1.08); opacity: 1; }
+    .project-info {
+      position: absolute;
+      inset: auto .8rem .8rem;
+      padding: 1rem;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      background: rgba(5,6,16,.58);
+      backdrop-filter: blur(18px);
+    }
+    .project-info span {
+      color: var(--cyan);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .project-info h3 { margin: .3rem 0 0; font-size: 1.1rem; }
+    .portfolio-cats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      margin-top: 1.4rem;
+    }
+    .chip {
+      padding: .55rem .75rem;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 800;
+    }
+
+    .why-grid {
+      margin-top: 2.5rem;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: .9rem;
+    }
+    .metric {
+      padding: 1.25rem;
+      min-height: 156px;
+    }
+    .metric strong {
+      display: block;
+      color: #fff;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1;
+      text-shadow: 0 0 28px rgba(22,230,255,.22);
+    }
+    .metric span {
+      display: block;
+      margin-top: .75rem;
+      color: var(--muted);
+      line-height: 1.45;
+      font-weight: 700;
+    }
+    .value-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .8rem;
+      margin-top: .9rem;
+    }
+    .value {
+      display: flex;
+      gap: .7rem;
+      align-items: center;
+      padding: .95rem;
+    }
+    .value svg { color: var(--green); flex: 0 0 auto; }
+    .value span { color: rgba(255,255,255,.8); font-weight: 750; }
+
+    .process {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 2.6rem;
+      position: relative;
+    }
+    .process::before {
+      content: "";
+      position: absolute;
+      top: 42px;
+      left: 7%;
+      right: 7%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet), var(--magenta), var(--gold));
+      box-shadow: 0 0 18px rgba(22,230,255,.46);
+    }
+    .step {
+      position: relative;
+      z-index: 1;
+      padding: 1rem;
+      min-height: 200px;
+    }
+    .step-number {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      margin-bottom: 1.2rem;
+      color: #050610;
+      background: linear-gradient(135deg, var(--cyan), var(--magenta));
+      font-weight: 900;
+      box-shadow: 0 0 28px rgba(22,230,255,.32);
+    }
+    .step h3 { margin-bottom: .55rem; }
+    .step p { margin: 0; color: var(--muted); line-height: 1.5; font-size: .9rem; }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 1rem;
+      align-items: stretch;
+      margin-top: 2.4rem;
+    }
+    .testimonial-view {
+      min-height: 380px;
+      padding: 1.25rem;
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      perspective: 900px;
+    }
+    .quote {
+      padding: 1.2rem;
+      transform: translateZ(0) rotateY(-3deg);
+    }
+    .quote:nth-child(2) { transform: translateY(34px) rotateY(4deg); }
+    .quote:nth-child(3) { grid-column: 1 / -1; transform: translateX(11%) rotateX(3deg); max-width: 76%; }
+    .quote p { color: rgba(255,255,255,.82); line-height: 1.65; }
+    .quote strong { color: var(--gold); }
+    .awards {
+      padding: 1.4rem;
+      display: grid;
+      align-content: center;
+      gap: 1rem;
+      overflow: hidden;
+    }
+    .award-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.055);
+    }
+    .award-item svg { color: var(--gold); filter: drop-shadow(0 0 14px rgba(239,199,106,.38)); }
+    .award-item span { color: var(--muted); display: block; font-size: .88rem; margin-top: .2rem; }
+
+    .lab {
+      min-height: 540px;
+      display: grid;
+      grid-template-columns: minmax(0, .82fr) minmax(0, 1fr);
+      gap: 1rem;
+      align-items: stretch;
+      margin-top: 2.4rem;
+    }
+    .lab-panel {
+      padding: 1.25rem;
+      display: grid;
+      align-content: center;
+      gap: 1.1rem;
+    }
+    .lab-panel p { color: var(--muted); line-height: 1.7; margin: 0; }
+    .lab-controls {
+      display: grid;
+      gap: .8rem;
+    }
+    .lab-controls label {
+      display: grid;
+      gap: .45rem;
+      color: rgba(255,255,255,.74);
+      font-size: .85rem;
+      font-weight: 800;
+    }
+    input[type="range"] { accent-color: var(--cyan); width: 100%; }
+    .lab-stage {
+      min-height: 480px;
+      position: relative;
+      overflow: hidden;
+    }
+    #labCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+      z-index: 1;
+    }
+    .lab-stage .watermark {
+      position: absolute;
+      inset: auto 1rem 1rem auto;
+      z-index: 2;
+      color: rgba(255,255,255,.48);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .86fr) minmax(0, 1.14fr);
+      gap: 1rem;
+      margin-top: 2.4rem;
+    }
+    .contact-card {
+      padding: 1.25rem;
+    }
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      color: rgba(255,255,255,.82);
+      word-break: break-word;
+    }
+    .contact-row:last-child { border-bottom: 0; }
+    .contact-row svg { color: var(--cyan); flex: 0 0 auto; }
+    .contact-row strong { display: block; color: #fff; margin-bottom: .18rem; }
+    .form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .9rem;
+      padding: 1.25rem;
+    }
+    .field {
+      position: relative;
+    }
+    .field.full { grid-column: 1 / -1; }
+    .field input,
+    .field textarea {
+      width: 100%;
+      min-height: 56px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--radius);
+      color: #fff;
+      background: rgba(255,255,255,.06);
+      outline: none;
+      padding: 1.05rem .95rem .55rem;
+      transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+    .field textarea { min-height: 150px; resize: vertical; }
+    .field label {
+      position: absolute;
+      left: .95rem;
+      top: .72rem;
+      color: rgba(255,255,255,.48);
+      font-size: .76rem;
+      font-weight: 800;
+      pointer-events: none;
+      transition: color .25s ease;
+    }
+    .field input:focus,
+    .field textarea:focus {
+      border-color: rgba(22,230,255,.54);
+      box-shadow: 0 0 0 4px rgba(22,230,255,.1);
+      background: rgba(255,255,255,.09);
+    }
+    .field input:focus + label,
+    .field textarea:focus + label { color: var(--cyan); }
+    .form-note {
+      grid-column: 1 / -1;
+      min-height: 1.2rem;
+      color: var(--green);
+      font-size: .9rem;
+      font-weight: 800;
+    }
+
+    footer {
+      position: relative;
+      z-index: 2;
+      padding: 5rem max(1.1rem, calc((100vw - 1180px) / 2)) 2rem;
+      border-top: 1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(180deg, transparent, rgba(0,0,0,.34)),
+        radial-gradient(circle at 50% 0%, rgba(22,230,255,.1), transparent 30rem);
+    }
+    .footer-logo {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      min-height: 280px;
+    }
+    .footer-logo svg {
+      width: min(340px, 76vw);
+      filter: drop-shadow(0 0 28px rgba(22,230,255,.38));
+    }
+    .footer-title {
+      margin: 1rem 0 .35rem;
+      font-size: clamp(2.7rem, 9vw, 7.4rem);
+      line-height: .84;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-indent: .16em;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .65rem;
+      margin-top: 1.5rem;
+    }
+    .copyright {
+      margin-top: 3rem;
+      color: var(--dim);
+      text-align: center;
+      font-size: .88rem;
+    }
+
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: opacity .8s var(--ease), transform .8s var(--ease);
+    }
+    .reveal.motion-ready {
+      opacity: 0;
+      transform: translateY(34px);
+    }
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .site-nav {
+        top: 10px;
+        width: min(760px, calc(100% - 22px));
+        flex-wrap: nowrap;
+      }
+      .menu-toggle { display: grid; margin-left: auto; }
+      .nav-links {
+        position: absolute;
+        top: calc(100% + .55rem);
+        left: 0;
+        right: 0;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: .45rem;
+        padding: .7rem;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: var(--radius);
+        background: rgba(8, 12, 26, .86);
+        backdrop-filter: blur(22px) saturate(150%);
+        box-shadow: 0 22px 70px rgba(0,0,0,.36);
+        opacity: 0;
+        transform: translateY(-10px) scale(.98);
+        pointer-events: none;
+        transition: opacity .24s var(--ease), transform .24s var(--ease);
+      }
+      .site-nav.is-open .nav-links {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+      }
+      .nav-links a {
+        min-height: 46px;
+        display: grid;
+        place-items: center;
+        color: rgba(255,255,255,.86);
+        background: rgba(255,255,255,.06);
+      }
+      .section {
+        padding-inline: max(1rem, env(safe-area-inset-left));
+        padding-block: clamp(4.2rem, 10vw, 6.8rem);
+      }
+      h1 {
+        max-width: 100%;
+        font-size: clamp(3rem, 12vw, 6rem);
+      }
+      h2 {
+        max-width: 100%;
+        font-size: clamp(2.15rem, 8.2vw, 4.6rem);
+        line-height: 1;
+      }
+      .hero-grid,
+      .about-wrap,
+      .split,
+      .lab,
+      .contact-grid { grid-template-columns: 1fr; }
+      .hero {
+        min-height: auto;
+        padding-top: 7.1rem;
+      }
+      .hero-stage {
+        min-height: clamp(350px, 62vw, 470px);
+        order: 0;
+        margin-top: 1rem;
+      }
+      .hero-title span { white-space: normal; }
+      .signal-sculpture { width: min(420px, 74vw); }
+      .about-card { min-height: auto; }
+      .about-inner { align-content: start; }
+      .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .why-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .value-list { grid-template-columns: 1fr 1fr; }
+      .process { grid-template-columns: 1fr; }
+      .process::before { left: 28px; right: auto; top: 24px; bottom: 24px; width: 2px; height: auto; }
+      .step { padding-left: 5rem; min-height: 150px; }
+      .step-number { position: absolute; left: 1rem; top: 1rem; }
+      .testimonial-view { min-height: auto; }
+      .quote,
+      .quote:nth-child(2),
+      .quote:nth-child(3) {
+        transform: none;
+        max-width: none;
+      }
+      .lab { min-height: auto; }
+      .lab-stage { min-height: min(440px, 70vw); }
+    }
+    @media (max-width: 760px) {
+      .site-nav { padding: .55rem .6rem .55rem .72rem; }
+      .btn.small {
+        min-width: 42px;
+        padding-inline: .72rem;
+      }
+      .btn.small svg { margin: 0; }
+      .btn.small { font-size: 0; gap: 0; }
+      .btn.small svg { width: 20px; height: 20px; }
+      .hero-actions .btn {
+        flex: 1 1 210px;
+      }
+      .portfolio-shell {
+        margin-inline: -1rem;
+        padding-inline: 1rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+      .portfolio-track {
+        animation: none;
+        width: max-content;
+        padding-right: 1rem;
+      }
+      .project-card {
+        width: min(78vw, 360px);
+        min-height: 430px;
+        scroll-snap-align: center;
+      }
+      .project-card img { min-height: 430px; }
+    }
+    @media (max-width: 640px) {
+      .brand span { display: none; }
+      .brand-glyph { width: 42px; height: 28px; }
+      .nav-links { grid-template-columns: 1fr 1fr; }
+      .hero { padding-top: 6.35rem; }
+      h1 {
+        font-size: clamp(2.65rem, 13.8vw, 4.45rem);
+        line-height: .94;
+      }
+      h2 {
+        font-size: clamp(2rem, 10.8vw, 3.25rem);
+        line-height: 1.02;
+      }
+      .lead {
+        font-size: 1rem;
+        line-height: 1.65;
+      }
+      .eyebrow-pill {
+        max-width: 100%;
+        font-size: .68rem;
+        letter-spacing: .1em;
+      }
+      .signal-sculpture { width: min(340px, 88vw); }
+      .signal-label {
+        width: min(84%, 280px);
+        font-size: .64rem;
+        letter-spacing: .12em;
+      }
+      .hero-proof,
+      .services-grid,
+      .why-grid,
+      .value-list,
+      .testimonial-view,
+      .form { grid-template-columns: 1fr; }
+      .field.full,
+      .quote:nth-child(3) { grid-column: auto; max-width: none; transform: none; }
+      .quote:nth-child(2) { transform: none; }
+      .about-fragments { grid-template-columns: 1fr; }
+      .project-card { width: 82vw; min-height: 390px; }
+      .project-card img { min-height: 390px; }
+      .project-info { padding: .86rem; }
+      .project-info h3 { font-size: 1rem; }
+      .about-logo { aspect-ratio: 4 / 3; }
+      .fragment strong { font-size: 1.08rem; }
+      .metric,
+      .service-card,
+      .contact-card,
+      .form,
+      .lab-panel { padding: 1rem; }
+      .award-item,
+      .contact-row {
+        align-items: flex-start;
+      }
+      .lab-stage { min-height: 340px; }
+      .footer-title, .intro-title {
+        letter-spacing: .06em;
+        text-indent: .06em;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+      }
+      .footer-logo svg { width: min(270px, 82vw); }
+    }
+    @media (max-width: 430px) {
+      .section { padding-inline: .88rem; }
+      .site-nav { width: calc(100% - 16px); }
+      .nav-links { grid-template-columns: 1fr; }
+      h1 { font-size: clamp(2.45rem, 13vw, 3.35rem); }
+      .hero-title { gap: .04em; }
+      .hero-actions { margin: 1.4rem 0 1.5rem; }
+      .btn {
+        width: 100%;
+        min-height: 46px;
+      }
+      .hero-stage { min-height: 330px; }
+      .signal-sculpture { width: min(300px, 88vw); }
+      .hero-proof { gap: .65rem; }
+      .proof { padding: .82rem; }
+      .proof strong { font-size: 1.55rem; }
+      .process::before { left: 22px; }
+      .step {
+        padding: .9rem .9rem .9rem 4.35rem;
+        min-height: auto;
+      }
+      .step-number {
+        left: .8rem;
+        width: 44px;
+        height: 44px;
+      }
+      .project-card {
+        width: 86vw;
+        min-height: 360px;
+      }
+      .project-card img { min-height: 360px; }
+      .portfolio-cats { gap: .42rem; }
+      .chip { font-size: .72rem; }
+      .contact-row { gap: .7rem; }
+      .footer-title { font-size: clamp(2.2rem, 16vw, 3.4rem); }
+    }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .001ms !important;
+      }
+      .intro { display: none; }
+      .reveal { opacity: 1; transform: none; }
+      .portfolio-track { animation: none; flex-wrap: wrap; width: auto; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+  <div class="noise" aria-hidden="true"></div>
+
+  <div class="intro" id="intro" aria-label="Prodigy Designs cinematic intro">
+    <div class="intro-particles" aria-hidden="true"></div>
+    <div class="intro-burst" aria-hidden="true"></div>
+    <div class="intro-mark">
+      <svg class="intro-wave" viewBox="0 0 650 230" role="img" aria-label="Prodigy wave logo">
+        <defs>
+          <linearGradient id="introGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+            <stop offset="0%" stop-color="#16e6ff"/>
+            <stop offset="48%" stop-color="#8a45ff"/>
+            <stop offset="100%" stop-color="#ff2ebd"/>
+          </linearGradient>
+          <filter id="softGlow">
+            <feGaussianBlur stdDeviation="5" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <path class="trail" d="M30 136 C112 126 142 76 203 65 C284 50 300 178 385 173 C455 169 468 82 540 93 C589 101 607 127 628 126" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" opacity=".55"/>
+        <path class="energy" d="M30 136 C112 126 142 76 203 65 C284 50 300 178 385 173 C455 169 468 82 540 93 C589 101 607 127 628 126" fill="none" stroke="url(#introGradient)" stroke-width="27" stroke-linecap="round" filter="url(#softGlow)"/>
+        <path d="M85 150 C154 145 184 97 223 91 C279 83 302 202 392 197 C464 193 490 104 548 115 C581 121 601 138 623 138" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+      <div class="intro-title">PRODIGY</div>
+      <p class="intro-tagline">Designing The Future. Perfecting The Present.</p>
+    </div>
+    <button class="intro-skip" type="button" id="skipIntro">Skip intro</button>
+  </div>
+
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a href="#top" class="brand" aria-label="Prodigy Designs Ltd. home">
+      <svg class="brand-glyph" viewBox="0 0 120 70" aria-hidden="true">
+        <path d="M3 43 C23 40 30 15 51 14 C78 13 73 61 101 55 C110 53 114 48 117 47" fill="none" stroke="url(#brandGrad)" stroke-width="10" stroke-linecap="round"/>
+        <defs><linearGradient id="brandGrad"><stop stop-color="#16e6ff"/><stop offset=".55" stop-color="#8a45ff"/><stop offset="1" stop-color="#ff2ebd"/></linearGradient></defs>
+      </svg>
+      <span>
+        <strong>PRODIGY</strong>
+        <span>Designs Ltd.</span>
+      </span>
+    </a>
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primaryMenu">
+      <i class="menu-lines" data-lucide="menu"></i>
+      <i class="menu-x" data-lucide="x"></i>
+    </button>
+    <div class="nav-links" id="primaryMenu">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#process">Process</a>
+      <a href="#lab">Lab</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="btn small" href="#contact"><i data-lucide="sparkles"></i> Start</a>
+  </nav>
+
+  <main id="main">
+    <section class="section hero" id="top">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow-pill reveal"><span class="pulse-dot"></span> Ultra-premium creative studio</div>
+          <h1 class="hero-title display-gradient reveal" aria-label="We design brands that dominate attention">
+            <span>WE DESIGN</span>
+            <span>BRANDS</span>
+            <span>THAT</span>
+            <span>DOMINATE</span>
+            <span>ATTENTION</span>
+          </h1>
+          <p class="lead reveal">We craft premium visual identities, digital experiences, motion graphics, and marketing assets that transform businesses into unforgettable brands.</p>
+          <div class="hero-actions reveal">
+            <a class="btn primary magnetic" href="#portfolio"><i data-lucide="images"></i> View Portfolio</a>
+            <a class="btn magnetic" href="#contact"><i data-lucide="send"></i> Start Your Project</a>
+          </div>
+          <div class="hero-proof reveal">
+            <div class="proof"><strong data-count="60">0</strong><span>Design systems and campaigns</span></div>
+            <div class="proof"><strong data-count="12">0</strong><span>Creative service verticals</span></div>
+            <div class="proof"><strong data-count="100">0</strong><span>Focused on premium detail</span></div>
+          </div>
+        </div>
+        <div class="hero-stage reveal" aria-label="Prodigy creative signal sculpture">
+          <div class="signal-sculpture" id="signalSculpture">
+            <span class="signal-ring" aria-hidden="true"></span>
+            <span class="signal-ring two" aria-hidden="true"></span>
+            <div class="signal-core" aria-hidden="true">
+              <svg class="signal-wave" viewBox="0 0 650 230">
+              <defs>
+                <linearGradient id="orbGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+                  <stop offset="0%" stop-color="#16e6ff"/>
+                  <stop offset="45%" stop-color="#8a45ff"/>
+                  <stop offset="100%" stop-color="#ff2ebd"/>
+                </linearGradient>
+              </defs>
+              <path d="M30 136 C112 126 142 76 203 65 C284 50 300 178 385 173 C455 169 468 82 540 93 C589 101 607 127 628 126" fill="none" stroke="url(#orbGradient)" stroke-width="28" stroke-linecap="round"/>
+              <path d="M90 158 C149 153 189 113 228 103 C288 91 304 202 390 197 C459 193 496 121 550 126 C582 129 601 143 620 144" fill="none" stroke="rgba(255,255,255,.48)" stroke-width="7" stroke-linecap="round"/>
+            </svg>
+            </div>
+            <div class="signal-label">Identity · Motion · Digital</div>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-cue" aria-hidden="true"></div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="about-wrap">
+        <div class="about-card glass reveal">
+          <div class="about-inner">
+            <img class="about-logo" src="./0%20(3).jpg" alt="Prodigy Designs brand presentation with neon wave logo" loading="lazy">
+            <div class="about-fragments">
+              <div class="fragment"><span>Identity</span><strong>Brand systems built to be remembered.</strong></div>
+              <div class="fragment"><span>Campaign</span><strong>Visuals engineered for attention.</strong></div>
+              <div class="fragment"><span>Digital</span><strong>Interfaces with luxury-grade flow.</strong></div>
+              <div class="fragment"><span>Motion</span><strong>Stories that move with purpose.</strong></div>
+            </div>
+          </div>
+        </div>
+        <div class="story">
+          <p class="section-kicker reveal">Who we are</p>
+          <h2 class="display-gradient reveal">Design That Builds Trust Before A Word Is Spoken</h2>
+          <p class="reveal">At PRODIGY, we believe great design is more than aesthetics. It is a powerful tool that builds trust, communicates value, and drives business growth.</p>
+          <p class="reveal">We create visually compelling experiences that help brands stand out, connect deeply with audiences, and leave lasting impressions.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <p class="section-kicker reveal">Services</p>
+      <h2 class="display-gradient reveal">Creative Systems For Businesses That Want To Stand Out</h2>
+      <p class="lead reveal">From logo suites to complete campaign ecosystems, every service is shaped with precision, polish, and a strong commercial point of view.</p>
+      <div class="services-grid">
+        <article class="service-card glass reveal"><div class="icon-box"><i data-lucide="crown"></i></div><h3>Brand Identity Design</h3><p>Logos, visual language, color systems, typography, brand assets, and refined identity foundations.</p></article>
+        <article class="service-card glass reveal"><div class="icon-box"><i data-lucide="badge-check"></i></div><h3>Logo Design</h3><p>Distinctive marks built for memorability, premium presentation, and confident multi-format usage.</p></article>
+        <article class="service-card glass reveal"><div class="icon-box"><i data-lucide="book-open"></i></div><h3>Brand Guidelines</h3><p>Clear rulebooks that keep every social post, ad, brochure, and digital touchpoint consistent.</p></article>
+        <article class="service-card glass reveal"><div class="icon-box"><i data-lucide="pen-tool"></i></div><h3>Graphic Design</h3><p>Elegant visuals for print, social, campaigns, presentations, and launch materials.</p></article>
+        <article class="service-card glass reveal"><div class="icon-box"><i data-lucide="instagram"></i></div><h3>Social Media Design</h3><p>Scroll-stopping creatives, reels covers, stories, carousels, and campaign graphics.</p></article>
+        <article class="service-card glass reveal"><div class="icon-box"><i data-lucide="megaphone"></i></div><h3>Advertising Creatives</h3><p>High-impact promotion visuals created to communicate quickly and sell beautifully.</p></article>
+        <article class="service-card glass reveal"><div class="icon-box"><i data-lucide="film"></i></div><h3>Motion Graphics</h3><p>Animated brand moments, reveal sequences, visual effects, and short-form motion assets.</p></article>
+        <article class="service-card glass reveal"><div class="icon-box"><i data-lucide="clapperboard"></i></div><h3>Video Editing</h3><p>Clean edits, luxury pacing, transitions, sound-led rhythm, and polished marketing videos.</p></article>
+        <article class="service-card glass reveal"><div class="icon-box"><i data-lucide="layout-dashboard"></i></div><h3>UI/UX Design</h3><p>Premium digital product flows with intuitive structure, visual hierarchy, and conversion focus.</p></article>
+        <article class="service-card glass reveal"><div class="icon-box"><i data-lucide="monitor-smartphone"></i></div><h3>Website Design</h3><p>Responsive web experiences that feel sharp, modern, fast, and memorable.</p></article>
+        <article class="service-card glass reveal"><div class="icon-box"><i data-lucide="smartphone"></i></div><h3>Mobile App Design</h3><p>Interface systems for app screens, onboarding, dashboards, and elegant user journeys.</p></article>
+        <article class="service-card glass reveal"><div class="icon-box"><i data-lucide="radio-tower"></i></div><h3>Digital Campaign Design</h3><p>Launch visuals, campaign sets, ad suites, and branded storytelling assets.</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="portfolio">
+      <p class="section-kicker reveal">Portfolio showcase</p>
+      <h2 class="display-gradient reveal">Selected Work Across Branding, Advertising, Digital And Campaign Design</h2>
+      <p class="lead reveal">A cinematic horizontal gallery built from your previous client work for Holy Queen, SS Sunlight Enterprises, beauty brands, and Prodigy’s own brand system.</p>
+      <div class="portfolio-cats reveal">
+        <span class="chip">Branding</span><span class="chip">Advertising</span><span class="chip">UI/UX</span><span class="chip">Motion Graphics</span><span class="chip">Social Media</span><span class="chip">Product Campaigns</span>
+      </div>
+      <div class="portfolio-shell reveal" aria-label="Auto-moving portfolio gallery">
+        <div class="portfolio-track">
+          <article class="project-card"><img src="./0%20(2).jpg" alt="Holy Queen luxury logo design" loading="lazy"><div class="project-info"><span>Brand Identity</span><h3>Holy Queen Credit Souhardha</h3></div></article>
+          <article class="project-card"><img src="./1%20(2).jpg" alt="Holy Queen premium brochure design" loading="lazy"><div class="project-info"><span>Marketing Materials</span><h3>Premium Interest Plans Brochure</h3></div></article>
+          <article class="project-card"><img src="./0.jpg" alt="Holy Queen business card design" loading="lazy"><div class="project-info"><span>Print Identity</span><h3>Executive Business Card System</h3></div></article>
+          <article class="project-card"><img src="./1.jpg" alt="Holy Queen informational brochure panels" loading="lazy"><div class="project-info"><span>Brochure Design</span><h3>Financial Services Layout</h3></div></article>
+          <article class="project-card"><img src="./Picture11.png" alt="SS Sunlight Enterprises assured benefit scheme poster" loading="lazy"><div class="project-info"><span>Product Campaign</span><h3>Assured Benefit Scheme</h3></div></article>
+          <article class="project-card"><img src="./Picture23.png" alt="SS Sunlight Enterprises application form design" loading="lazy"><div class="project-info"><span>Campaign Assets</span><h3>Emerald Gold Member Form</h3></div></article>
+          <article class="project-card"><img src="./Picture44.png" alt="SS Sunlight Enterprises pastel application form design" loading="lazy"><div class="project-info"><span>Campaign Assets</span><h3>Mint Gold Member Form</h3></div></article>
+          <article class="project-card"><img src="./makeup%20artist%20(1).png" alt="Nishu Sharma makeup artist Halloween offer poster" loading="lazy"><div class="project-info"><span>Social Media</span><h3>Beauty Offer Creative</h3></div></article>
+          <article class="project-card"><img src="./1.png" alt="Nishu makeup artist logo" loading="lazy"><div class="project-info"><span>Logo Design</span><h3>Nishu Makeup Artist</h3></div></article>
+          <article class="project-card"><img src="./2.png" alt="Omorfia makeup aura logo" loading="lazy"><div class="project-info"><span>Logo Design</span><h3>Omorfia Beauty Identity</h3></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="why">
+      <p class="section-kicker reveal">Why choose Prodigy</p>
+      <h2 class="display-gradient reveal">Premium Execution With A Results-Driven Creative Spine</h2>
+      <div class="why-grid">
+        <div class="metric glass reveal"><strong data-count="24">0</strong><span>Hour-first-response mindset for project momentum.</span></div>
+        <div class="metric glass reveal"><strong data-count="100">0</strong><span>Original concepts shaped around your market.</span></div>
+        <div class="metric glass reveal"><strong data-count="4">0</strong><span>Core design disciplines in one creative studio.</span></div>
+        <div class="metric glass reveal"><strong data-count="7">0</strong><span>Quality principles guiding every project.</span></div>
+      </div>
+      <div class="value-list">
+        <div class="value glass reveal"><i data-lucide="check-circle-2"></i><span>Creative & Original Concepts</span></div>
+        <div class="value glass reveal"><i data-lucide="check-circle-2"></i><span>Modern Premium Designs</span></div>
+        <div class="value glass reveal"><i data-lucide="check-circle-2"></i><span>Fast Turnaround</span></div>
+        <div class="value glass reveal"><i data-lucide="check-circle-2"></i><span>Attention to Detail</span></div>
+        <div class="value glass reveal"><i data-lucide="check-circle-2"></i><span>Client-Focused Approach</span></div>
+        <div class="value glass reveal"><i data-lucide="check-circle-2"></i><span>Professional Communication</span></div>
+        <div class="value glass reveal"><i data-lucide="check-circle-2"></i><span>Results-Driven Design</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="process">
+      <p class="section-kicker reveal">Design process</p>
+      <h2 class="display-gradient reveal">From Discovery To Delivery, Every Stage Has Momentum</h2>
+      <div class="process">
+        <article class="step glass reveal"><div class="step-number">01</div><h3>Discover</h3><p>We understand the brand, audience, goals, and emotional position before the visual work begins.</p></article>
+        <article class="step glass reveal"><div class="step-number">02</div><h3>Research</h3><p>We study competitors, references, culture, and category signals to create a sharper direction.</p></article>
+        <article class="step glass reveal"><div class="step-number">03</div><h3>Design</h3><p>We shape the visual system with typography, layout, color, imagery, and motion language.</p></article>
+        <article class="step glass reveal"><div class="step-number">04</div><h3>Refine</h3><p>We polish details, test legibility, strengthen hierarchy, and make the identity more ownable.</p></article>
+        <article class="step glass reveal"><div class="step-number">05</div><h3>Deliver</h3><p>We package assets clearly so your brand can launch across web, print, and social channels.</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="proof">
+      <p class="section-kicker reveal">Client signal</p>
+      <h2 class="display-gradient reveal">Presentation Quality That Makes Brands Feel Larger</h2>
+      <div class="split">
+        <div class="testimonial-view glass reveal">
+          <article class="quote glass"><p>"Prodigy turned a simple brief into a polished brand presence. The final artwork felt premium, clear, and ready to use."</p><strong>Holy Queen Project</strong></article>
+          <article class="quote glass"><p>"The campaign visuals had the glow and authority we wanted. Every poster looked like a flagship launch."</p><strong>SS Sunlight Campaign</strong></article>
+          <article class="quote glass"><p>"For beauty creatives, the layouts were bold, memorable, and instantly social-ready."</p><strong>Beauty Brand Work</strong></article>
+        </div>
+        <div class="awards glass reveal">
+          <div class="award-item"><i data-lucide="trophy"></i><div><strong>Luxury Brand Presentation</strong><span>High-end typography, contrast, and visual hierarchy.</span></div></div>
+          <div class="award-item"><i data-lucide="sparkle"></i><div><strong>Holographic Digital Direction</strong><span>Neon gradients, cinematic lighting, and future-facing identity.</span></div></div>
+          <div class="award-item"><i data-lucide="zap"></i><div><strong>Campaign Ready Assets</strong><span>Social, print, poster, logo, brochure, and digital material systems.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="lab">
+      <p class="section-kicker reveal">Interactive creative lab</p>
+      <h2 class="display-gradient reveal">Play With The Energy Behind The Prodigy Wave</h2>
+      <div class="lab">
+        <div class="lab-panel glass reveal">
+          <p>Move your cursor through the field, adjust the sliders, and watch the particles pull into a living design system. It is a small interactive preview of how motion, light, and brand language can work together.</p>
+          <div class="lab-controls">
+            <label>Particle intensity <input id="density" type="range" min="40" max="180" value="110"></label>
+            <label>Wave distortion <input id="distortion" type="range" min="1" max="14" value="7"></label>
+            <label>Light speed <input id="speed" type="range" min="1" max="12" value="6"></label>
+          </div>
+        </div>
+        <div class="lab-stage glass reveal">
+          <canvas id="labCanvas" aria-label="Interactive particle design lab"></canvas>
+          <div class="watermark">Prodigy Lab</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <p class="section-kicker reveal">Contact</p>
+      <h2 class="display-gradient reveal">Let’s Build A Brand That Feels Impossible To Ignore</h2>
+      <div class="contact-grid">
+        <div class="contact-card glass reveal">
+          <div class="contact-row"><i data-lucide="mail"></i><div><strong>Email</strong><a href="mailto:ProdigyDesignLtd@gmail.com">ProdigyDesignLtd@gmail.com</a></div></div>
+          <div class="contact-row"><i data-lucide="phone"></i><div><strong>Phone</strong><a href="tel:+919814860334">+91 9814860334</a></div></div>
+          <div class="contact-row"><i data-lucide="instagram"></i><div><strong>Instagram</strong><a href="https://instagram.com/Prodigy_Design_Ltd" target="_blank" rel="noreferrer">@Prodigy_Design_Ltd</a></div></div>
+          <div class="contact-row"><i data-lucide="map-pin"></i><div><strong>Studio Focus</strong>Brand identity, campaigns, UI/UX, websites, motion, and marketing design.</div></div>
+        </div>
+        <form class="form glass reveal" id="contactForm">
+          <div class="field"><input id="name" name="name" autocomplete="name" required><label for="name">Your name</label></div>
+          <div class="field"><input id="email" name="email" type="email" autocomplete="email" required><label for="email">Email address</label></div>
+          <div class="field"><input id="brand" name="brand"><label for="brand">Brand or business</label></div>
+          <div class="field"><input id="budget" name="budget"><label for="budget">Project type</label></div>
+          <div class="field full"><textarea id="message" name="message" required></textarea><label for="message">Tell us what you want to create</label></div>
+          <button class="btn primary magnetic" type="submit"><i data-lucide="send"></i> Send Project Request</button>
+          <div class="form-note" id="formNote" role="status"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-logo">
+      <svg viewBox="0 0 650 230" aria-hidden="true">
+        <defs>
+          <linearGradient id="footGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+            <stop offset="0%" stop-color="#16e6ff"/><stop offset=".52" stop-color="#8a45ff"/><stop offset="1" stop-color="#ff2ebd"/>
+          </linearGradient>
+        </defs>
+        <path d="M30 136 C112 126 142 76 203 65 C284 50 300 178 385 173 C455 169 468 82 540 93 C589 101 607 127 628 126" fill="none" stroke="url(#footGradient)" stroke-width="27" stroke-linecap="round"/>
+        <path d="M85 150 C154 145 184 97 223 91 C279 83 302 202 392 197 C464 193 490 104 548 115 C581 121 601 138 623 138" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+      <div class="footer-title display-gradient">PRODIGY</div>
+      <p class="lead">Designing The Future. Perfecting The Present.</p>
+      <div class="footer-links">
+        <a class="chip" href="#services">Services</a>
+        <a class="chip" href="#portfolio">Portfolio</a>
+        <a class="chip" href="#about">About</a>
+        <a class="chip" href="#contact">Contact</a>
+        <a class="chip" href="https://instagram.com/Prodigy_Design_Ltd" target="_blank" rel="noreferrer">Instagram</a>
+      </div>
+    </div>
+    <p class="copyright">© 2026 Prodigy Designs Ltd. All rights reserved. Crafted as a cinematic single-file digital experience.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const intro = document.getElementById('intro');
+    const skipIntro = document.getElementById('skipIntro');
+    const root = document.documentElement;
+
+    function hideIntro() {
+      if (intro) intro.classList.add('is-hidden');
+    }
+    if (skipIntro) skipIntro.addEventListener('click', hideIntro);
+    window.addEventListener('load', () => {
+      if (prefersReduced) hideIntro();
+      else setTimeout(hideIntro, 5800);
+    });
+
+    if (window.lucide) lucide.createIcons({ attrs: { width: 20, height: 20, 'stroke-width': 2.1 } });
+
+    let pointerX = .5;
+    let pointerY = .5;
+    window.addEventListener('pointermove', (event) => {
+      pointerX = event.clientX / innerWidth;
+      pointerY = event.clientY / innerHeight;
+      root.style.setProperty('--mx', `${event.clientX}px`);
+      root.style.setProperty('--my', `${event.clientY}px`);
+      const orb = document.getElementById('signalSculpture');
+      if (orb && !prefersReduced) {
+        const rx = (pointerY - .5) * -10;
+        const ry = (pointerX - .5) * 14;
+        orb.style.transform = `translateY(-8px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      }
+    }, { passive: true });
+
+    function createBackgroundParticles() {
+      const canvas = document.getElementById('particleCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      function resize() {
+        const ratio = Math.min(devicePixelRatio, 1.25);
+        canvas.width = innerWidth * ratio;
+        canvas.height = innerHeight * ratio;
+        canvas.style.width = innerWidth + 'px';
+        canvas.style.height = innerHeight + 'px';
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        const count = Math.min(76, Math.floor(innerWidth * innerHeight / 18000));
+        particles = Array.from({ length: count }, () => ({
+          x: Math.random() * innerWidth,
+          y: Math.random() * innerHeight,
+          z: Math.random() * 1 + .2,
+          vx: (Math.random() - .5) * .24,
+          vy: (Math.random() - .5) * .24,
+          hue: Math.random() < .5 ? 188 : 318
+        }));
+      }
+      function frame() {
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        ctx.shadowBlur = 8;
+        for (const p of particles) {
+          p.x += p.vx + (pointerX - .5) * p.z * .18;
+          p.y += p.vy + (pointerY - .5) * p.z * .18;
+          if (p.x < -20) p.x = innerWidth + 20;
+          if (p.x > innerWidth + 20) p.x = -20;
+          if (p.y < -20) p.y = innerHeight + 20;
+          if (p.y > innerHeight + 20) p.y = -20;
+          ctx.beginPath();
+          ctx.fillStyle = `hsla(${p.hue}, 100%, 66%, ${.16 + p.z * .32})`;
+          ctx.shadowColor = `hsla(${p.hue}, 100%, 66%, .85)`;
+          ctx.arc(p.x, p.y, p.z * 1.45, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.shadowBlur = 0;
+        if (!prefersReduced) requestAnimationFrame(frame);
+      }
+      resize();
+      addEventListener('resize', resize, { passive: true });
+      frame();
+    }
+    createBackgroundParticles();
+
+    function setupMotion() {
+      const revealEls = document.querySelectorAll('.reveal');
+      if (window.gsap && window.ScrollTrigger && !prefersReduced) {
+        gsap.registerPlugin(ScrollTrigger);
+        revealEls.forEach(el => gsap.set(el, { opacity: 0, y: 34 }));
+        revealEls.forEach((el, i) => {
+          gsap.to(el, {
+            opacity: 1,
+            y: 0,
+            duration: .9,
+            ease: 'power3.out',
+            delay: Math.min(i % 6, 4) * .04,
+            scrollTrigger: { trigger: el, start: 'top 86%' }
+          });
+        });
+        gsap.utils.toArray('.service-card').forEach((card, i) => {
+          card.style.setProperty('--tilt', i % 2 ? '3deg' : '-3deg');
+        });
+      } else {
+        revealEls.forEach(el => el.classList.add('motion-ready'));
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('in-view');
+          });
+        }, { threshold: .12 });
+        revealEls.forEach(el => observer.observe(el));
+      }
+    }
+    setupMotion();
+
+    function setupCounters() {
+      const counters = document.querySelectorAll('[data-count]');
+      const seen = new WeakSet();
+      const runCounter = (el) => {
+        const target = Number(el.dataset.count);
+        const suffix = target === 100 ? '%' : '+';
+        const duration = 1200;
+        const start = performance.now();
+        const tick = (now) => {
+          const t = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      };
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !seen.has(entry.target)) {
+            seen.add(entry.target);
+            runCounter(entry.target);
+          }
+        });
+      }, { threshold: .35 });
+      counters.forEach(el => observer.observe(el));
+    }
+    setupCounters();
+
+    function setupMagneticButtons() {
+      if (prefersReduced) return;
+      document.querySelectorAll('.magnetic').forEach(btn => {
+        btn.addEventListener('pointermove', (event) => {
+          const rect = btn.getBoundingClientRect();
+          const x = event.clientX - rect.left - rect.width / 2;
+          const y = event.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${x * .08}px, ${y * .12}px)`;
+        });
+        btn.addEventListener('pointerleave', () => btn.style.transform = '');
+      });
+    }
+    setupMagneticButtons();
+
+    function setupLab() {
+      const canvas = document.getElementById('labCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const density = document.getElementById('density');
+      const distortion = document.getElementById('distortion');
+      const speed = document.getElementById('speed');
+      let particles = [];
+      let mouse = { x: 0, y: 0, active: false };
+      let labVisible = false;
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        const ratio = Math.min(devicePixelRatio, 1.3);
+        canvas.width = rect.width * ratio;
+        canvas.height = rect.height * ratio;
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        rebuild();
+      }
+      function rebuild() {
+        const rect = canvas.getBoundingClientRect();
+        const count = Number(density.value);
+        particles = Array.from({ length: count }, (_, i) => ({
+          x: Math.random() * rect.width,
+          y: Math.random() * rect.height,
+          base: Math.random() * Math.PI * 2,
+          r: Math.random() * 1.8 + .8,
+          hue: i % 3 === 0 ? 188 : i % 3 === 1 ? 316 : 44
+        }));
+      }
+      canvas.addEventListener('pointermove', (event) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = event.clientX - rect.left;
+        mouse.y = event.clientY - rect.top;
+        mouse.active = true;
+      });
+      canvas.addEventListener('pointerleave', () => mouse.active = false);
+      [density, distortion, speed].forEach(input => input.addEventListener('input', () => {
+        if (input === density) rebuild();
+      }));
+
+      function frame(time) {
+        const rect = canvas.getBoundingClientRect();
+        const t = time * .001 * Number(speed.value) * .38;
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        const grad = ctx.createLinearGradient(0, 0, rect.width, rect.height);
+        grad.addColorStop(0, 'rgba(22,230,255,.12)');
+        grad.addColorStop(.5, 'rgba(138,69,255,.12)');
+        grad.addColorStop(1, 'rgba(255,46,189,.16)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, rect.width, rect.height);
+        ctx.beginPath();
+        for (let x = 0; x < rect.width; x += 14) {
+          const y = rect.height * .5 + Math.sin(x * .018 + t) * 52 + Math.sin(x * .041 - t * .7) * Number(distortion.value) * 6;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = 'rgba(255,255,255,.26)';
+        ctx.lineWidth = 2;
+        ctx.shadowColor = 'rgba(22,230,255,.75)';
+        ctx.shadowBlur = 18;
+        ctx.stroke();
+
+        for (const p of particles) {
+          const waveY = rect.height * .5 + Math.sin(p.x * .018 + t + p.base) * 70;
+          let dx = 0;
+          let dy = 0;
+          if (mouse.active) {
+            const mx = mouse.x - p.x;
+            const my = mouse.y - p.y;
+            const d = Math.hypot(mx, my) || 1;
+            const force = Math.min(80 / d, 2.8);
+            dx = mx / d * force * 13;
+            dy = my / d * force * 13;
+          }
+          p.x += Math.sin(t + p.base) * .22;
+          p.y += (waveY - p.y) * .012;
+          if (p.x < -10) p.x = rect.width + 10;
+          if (p.x > rect.width + 10) p.x = -10;
+          ctx.beginPath();
+          ctx.fillStyle = `hsla(${p.hue}, 100%, 66%, .78)`;
+          ctx.shadowColor = `hsla(${p.hue}, 100%, 66%, .9)`;
+          ctx.shadowBlur = 16;
+          ctx.arc(p.x + dx, p.y + dy, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.shadowBlur = 0;
+        if (!prefersReduced && labVisible) requestAnimationFrame(frame);
+      }
+      resize();
+      addEventListener('resize', resize, { passive: true });
+      const observer = new IntersectionObserver(entries => {
+        const nextVisible = entries.some(entry => entry.isIntersecting);
+        if (nextVisible && !labVisible) {
+          labVisible = true;
+          requestAnimationFrame(frame);
+        } else if (!nextVisible) {
+          labVisible = false;
+        }
+      }, { threshold: .05 });
+      observer.observe(canvas);
+    }
+    setupLab();
+
+    const contactForm = document.getElementById('contactForm');
+    const formNote = document.getElementById('formNote');
+    if (contactForm) {
+      contactForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        formNote.textContent = 'Project request staged. Email ProdigyDesignLtd@gmail.com or call +91 9814860334 to send it formally.';
+        contactForm.reset();
+      });
+    }
+  </script>
+</body>
+</html>
